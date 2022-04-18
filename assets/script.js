@@ -2,25 +2,55 @@ var startQuizBtn = document.getElementById("startquiz");
 var span = document.getElementsByTagName("span");
 var entryEl = document.getElementById("entry");
 var questionsEl = document.getElementById("questions");
+var answerEl = document.getElementById("answer");
 var endPromptEl = document.getElementById("endprompt");
+var timeLeft = 60;
 var timeInterval;
 var questionCounter = 0;
 var questionList = [
     {
-        question: "What color is a banana?",
-        answers: ["red", "blue", "yellow", "green"],
-        correctAnswer: "yellow"
+        question: "Which composer is famously known for his numerous amounts of violin concertos who wrote in the Baroque time period?",
+        answers: ["George Frideric Handel", "Antonio Vivaldi", "Arcangelo Corelli", "J. S. Bach"],
+        correctAnswer: "Antonio Vivaldi"
     },
     {
-        question: "What color is an orange?",
-        answers: ["blue", "orange", "red", "purple"],
-        correctAnswer: "orange"
+        question: "Who is considered the grandfather of the Minimalism genre?",
+        answers: ["Steve Reich", "John Cage", "La Monte Young", "Terry Riley"],
+        correctAnswer: "La Monte Young"
+    },
+    {
+        question: "This composer wrote three ballets in increasingly progressive style in France with the Ballet Russe under Sergei Diaghilev's coreography:",
+        answers: ["Igor Stravinsky", "Rimsky Korsakov", "Arnold Schoenberg", "Sergei Rachmaninoff"],
+        correctAnswer: "Igor Stravinsky"
+    },
+    {
+        question: "The serialist genre was attributed to all of these composers EXCEPT for:",
+        answers: ["Milton Babbitt", "Elliott Carter", "Arnold Schoenberg", "Anton Webern"],
+        correctAnswer: "Elliott Carter"
+    },
+    {
+        question: "Who was the Hungarian Composer known for his efforts in helping to found the process known as ethnomusicology?",
+        answers: ["Zoltán Kodály", "György Ligeti", "Ernő Dohnányi", "Béla Bartók"],
+        correctAnswer: "Béla Bartók"
+    },
+    {
+        question: "Spectralism was the term used to describe this 20th century composer:",
+        answers: ["Gérard Grisey", "Krzysztof Penderecki", "György Ligeti", "Steve Reich"],
+        correctAnswer: "Gérard Grisey"
+    },
+    {
+        question: "J.S. Bach had many composers influence him. Among these four, who did NOT influence him?",
+        answers: ["Georg Philipp Telemann", "Antonio Vivaldi", "Alessandro Scarlatti", "Dieterich Buxtehude"],
+        correctAnswer: "Alessandro Scarlatti"
+    },
+    {
+        question: "Who composed the famous 'Heroic' Symphony that is considered to be the start of the Romantic Time period?",
+        answers: ["J.S. Bach", "Beethoven", "Mozart", "Haydn"],
+        correctAnswer: "Beethoven"
     }
 ]
 
 function startQuiz () {
-    //take the audience to the first question with answer choices
-    //probably with an if loop
     countdown();
     entryEl.classList.add("hide");
     questionsEl.classList.remove("hide");
@@ -28,7 +58,6 @@ function startQuiz () {
 };
 
 function countdown () {
-    let timeLeft = 10;
     timeInterval = setInterval(function() {
         if (timeLeft > 0) {
             span[0].textContent = timeLeft + "s";
@@ -43,10 +72,10 @@ function countdown () {
 function questionRender () {
     if (questionList.length > questionCounter) {
     questionsEl.innerHTML = "";
-    var questionP = document.createElement("p");
-    //questionP.classList.add("whatever desired for styling, look at line 52 for example");
-    questionP.textContent = questionList[questionCounter].question;
-    questionsEl.append(questionP);
+    var questionH2 = document.createElement("h3");
+    //questionH2.classList.add("");
+    questionH2.textContent = questionList[questionCounter].question;
+    questionsEl.append(questionH2);
     for (var i = 0; i < questionList[questionCounter].answers.length; i++) {
         var answerBtn = document.createElement("button");
         answerBtn.classList.add("btn-primary", "btn", "m-2");
@@ -60,16 +89,20 @@ function questionRender () {
 
 function clickHandler(event) {
     if (event.target.tagName === "BUTTON") {
+        //answerEl.innerHTML = "";
+        var answerP = document.createElement("p");
         if (event.target.textContent === questionList[questionCounter].correctAnswer) {
-            console.log("true");
-            //display correct
+            answerP.textContent = "Correct!";
+            questionsEl.append(answerP);
+            console.log("correct");
         }
         else {
+            answerP.textContent = "Incorrect! 10s have been deducted from your total time.";
+            questionsEl.append(answerP);
             console.log("false");
-            //display incorrect, subtract 10s
+            timeLeft = timeLeft - 10;
         }
         questionCounter = questionCounter + 1;
-
         questionRender();
     }
 }
@@ -80,12 +113,6 @@ function endQuiz() {
     endPromptEl.classList.remove("hide");
 }
 //add score up above
-
-
-//use if loops to take the audience through the quiz:
-//if correct: display "Correct!" then go to next question (probably use if here)
-//if incorrect: display "Incorrect!" then deduct 10s from time (probably use else here)
-
 
 //store high scores on local storage after the quiz has been completed
 questionsEl.addEventListener("click", clickHandler)
