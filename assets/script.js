@@ -78,7 +78,7 @@ function questionRender () {
     questionsEl.append(questionH2);
     for (var i = 0; i < questionList[questionCounter].answers.length; i++) {
         var answerBtn = document.createElement("button");
-        answerBtn.classList.add("btn-primary", "btn", "m-2");
+        answerBtn.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
         answerBtn.textContent = questionList[questionCounter].answers[i];
         questionsEl.append(answerBtn);
     }
@@ -108,12 +108,38 @@ function clickHandler(event) {
 }
 
 function endQuiz() {
-    clearInterval(timeInterval);
     questionsEl.classList.add("hide");
     endPromptEl.classList.remove("hide");
+    var endPromptP = document.createElement("p");
+    //var correctQuestions = ; //TODO: find a way to store how many correct questions the audience answered 
+    var finalScore = timeLeft /*+ correctQuestions*/;
+    endPromptP.textContent = "Your final score is " + finalScore + ".";
+    endPromptEl.append(endPromptP);
+    clearInterval(timeInterval);
+    var endPromptInput = document.createElement("input");
+    endPromptEl.append(endPromptInput);
+    var endPromptGoBack = document.createElement("button");
+    endPromptGoBack.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
+    endPromptGoBack.textContent = "Go Back";
+    endPromptEl.append(endPromptGoBack);
+    var endPromptViewHighScores = document.createElement("button");
+    endPromptViewHighScores.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
+    endPromptViewHighScores.textContent = "View High Scores";
+    endPromptEl.append(endPromptViewHighScores);
 }
 //add score up above
 
+// create user object from submission
+/*var user = {
+    firstName: firstNameInput.value.trim(),
+  };
+
+  // set new submission to local storage 
+  localStorage.setItem("user", JSON.stringify(user));
+  console.log(firstNameInput.value + " " + lastNameInput.value + " " + emailInput.value + " " + passwordInput.value);
+*/
+
 //store high scores on local storage after the quiz has been completed
+
 questionsEl.addEventListener("click", clickHandler)
 startQuizBtn.addEventListener("click", startQuiz);
