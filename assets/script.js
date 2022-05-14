@@ -119,17 +119,26 @@ function scoreHandler(event) {
     viewScores();
 }
 
-function endQuiz() {
+var finalScore = timeLeft;
+function endQuiz(event = null) {
+    if (event != null) {
+        event.preventDefault();
+    }
     answerEl.classList.add("hide");
     questionsEl.classList.add("hide");
     endPromptEl.classList.remove("hide");
-    var endPromptP = document.createElement("p");
-    //var correctQuestions = ; //TODO: find a way to store how many correct questions the audience answered 
-    
-    var finalScore = timeLeft /*+ correctQuestions*/;
-    endPromptP.textContent = "Your final score is " + finalScore + ".";
-    endPromptEl.append(endPromptP);
+
+    var endPromptFinalScore = document.createElement("p");
+    endPromptFinalScore.textContent = "Your final score is " + finalScore;
+    endPromptEl.append(endPromptFinalScore);
     clearInterval(timeInterval);
+
+    var lineBreak = document.createElement("br");
+    endPromptEl.append(lineBreak);
+
+    var endPromptWriteInitials = document.createElement("p");
+    endPromptWriteInitials.textContent = "Write your intials below";
+    endPromptEl.append(endPromptWriteInitials);
 
     var endPromptInput = document.createElement("input");
     endPromptInput.setAttribute("id", "initials");
@@ -140,25 +149,36 @@ function endQuiz() {
     endPromptSubmitScore.textContent = "Submit Score";
     endPromptEl.append(endPromptSubmitScore);
 
-    var lineBreak = document.createElement("br");
     endPromptEl.append(lineBreak);
 
     endPromptSubmitScore.addEventListener("click", scoreHandler);
+
+    //var scoreStorage = localStorage.getItem(finalScore);
+    //console.log(scoreStorage);
 }
+
+var scoreStorage = localStorage.getItem(finalScore);
+console.log(scoreStorage);
 
 function viewScores(event = null) {
     if (event != null) {
         event.preventDefault();
     }
+    entryEl.classList.add("hide");
     questionsEl.classList.add("hide");
     answerEl.classList.add("hide");
     endPromptEl.classList.add("hide");
     var viewScoresH3 = document.createElement("h3");
-    viewScoresH3.textContent = "High Scores";
+    viewScoresH3.textContent = "High Scores:";
     viewScoresEl.append(viewScoresH3);
     viewScoresEl.classList.remove("hide");
+
     var initialStorage = localStorage.getItem("initials");
     console.log(initialStorage);
+
+    var scoreDisplayP = document.createElement("p");
+    scoreDisplayP.textContent = initialStorage + " - " + scoreStorage;
+    viewScoresEl.append(scoreDisplayP);
 
     var endPromptGoBack = document.createElement("button");
     endPromptGoBack.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
@@ -172,8 +192,10 @@ function viewScores(event = null) {
     clearScoresBtn.textContent = "Clear Scores";
     viewScoresEl.append(clearScoresBtn);
     clearScoresBtn.addEventListener("click", clearScores);
+
     //get local storages
     //append local storages and style it
+    //save scores (maybe concatenation)
 }
 
 function clearScores(event) {
