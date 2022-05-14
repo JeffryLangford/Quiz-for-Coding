@@ -26,17 +26,10 @@ WHEN the game is over
 THEN I can save my initials and score
 ```
 
-The following animation demonstrates the application functionality:
+## Screenshot:
 
-![Demonstration of the Coding Quiz Challenge.](./Assets/04-web-apis-homework-demo.gif)
+![alt text](./assets/images/Screenshot%202022-05-14%20181433.png)
 
-### Review
+## Link to Application:
 
-You are required to submit the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
-
----
-© 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
+[https://jeffrylangford.github.io/Quiz-for-Coding/](https://jeffrylangford.github.io/Quiz-for-Coding/)
