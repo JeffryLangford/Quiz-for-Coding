@@ -1,3 +1,4 @@
+// grabbing html elements
 var startQuizBtn = document.getElementById("startquiz");
 var span = document.getElementsByTagName("span");
 var entryEl = document.getElementById("entry");
@@ -6,6 +7,11 @@ var answerEl = document.getElementById("answer");
 var endPromptEl = document.getElementById("endprompt");
 var viewScoresEl = document.getElementById("view-scores");
 var viewScoresLink = document.getElementById("score-check");
+var endPromptInput = document.createElement("input");
+    endPromptInput.setAttribute("id", "initials");
+var scoreDisplayEl = document.getElementById("score-display");
+
+// defining variables
 var timeLeft = 60;
 var timeInterval;
 var questionCounter = 0;
@@ -46,12 +52,19 @@ var questionList = [
         correctAnswer: "Alessandro Scarlatti"
     },
     {
-        question: "Who composed the famous 'Heroic' Symphony that is considered to be the start of the Romantic Time period?",
+        question: "Who composed the famous 'Heroic' Symphony that is considered to be the start of the Romantic time period?",
         answers: ["J.S. Bach", "Beethoven", "Mozart", "Haydn"],
         correctAnswer: "Beethoven"
+    },
+    {
+        question: "Alberto Ginestera, the famous Argentinian Composer, passed away right before he finished composing a concerto for this instrument:",
+        answers: ["Viola", "Organ", "Double Bass", "Guitar"],
+        correctAnswer: "Double Bass"
     }
 ]
 
+
+// starts quiz and removes start screen
 function startQuiz () {
     countdown();
     entryEl.classList.add("hide");
@@ -59,6 +72,7 @@ function startQuiz () {
     questionRender();
 };
 
+// countdown at the top right
 function countdown () {
     timeInterval = setInterval(function() {
         if (timeLeft > 0) {
@@ -69,57 +83,68 @@ function countdown () {
             endQuiz();
         }
     }, 1000)
+    
 }
 
+// cycles through questions and makes buttons to answer
 function questionRender () {
     if (questionList.length > questionCounter) {
-    questionsEl.innerHTML = "";
-    var questionH2 = document.createElement("h3");
-    //questionH2.classList.add("");
-    questionH2.textContent = questionList[questionCounter].question;
-    questionsEl.append(questionH2);
-    for (var i = 0; i < questionList[questionCounter].answers.length; i++) {
-        var answerBtn = document.createElement("button");
-        answerBtn.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
-        answerBtn.textContent = questionList[questionCounter].answers[i];
-        questionsEl.append(answerBtn);
-    }
+        questionsEl.innerHTML = "";
+        var questionH2 = document.createElement("h3");
+        questionH2.textContent = questionList[questionCounter].question;
+        questionsEl.append(questionH2);
+        for (var i = 0; i < questionList[questionCounter].answers.length; i++) {
+            var answerBtn = document.createElement("button");
+            answerBtn.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
+            answerBtn.textContent = questionList[questionCounter].answers[i];
+            questionsEl.append(answerBtn);
+        }
     } else {
         endQuiz();
     }
 }
 
+// responds with either correct or incorrect then deducts 10s if incorrect
 function clickHandler(event) {
     if (event.target.tagName === "BUTTON") {
         if (event.target.textContent === questionList[questionCounter].correctAnswer) {
             answerEl.innerHTML = "Correct!";
-            console.log("correct");
             answerEl.classList.remove("hide");
         }
         else {
-            answerEl.innerHTML = "Incorrect! 10 seconds have been deducted from your time.";
-            console.log("false");
+            answerEl.innerHTML = "Incorrect! The correct answer was <b>" + questionList[questionCounter].correctAnswer + "<b>.";
             answerEl.classList.remove("hide");
-            timeLeft = timeLeft - 10;
+            timeLeft = timeLeft - 5;
         }
         questionCounter = questionCounter + 1;
         questionRender();
     }
 }
 
+// adds initials to local storage
 function scoreHandler(event) {
     event.preventDefault();
+    var finalScore = timeLeft;
     var user = document.getElementById("initials").value.trim();
-    var storage = localStorage.getItem("initials");
-    if (storage) {
-        localStorage.setItem("initials", JSON.stringify(storage + user));
+    var scores = JSON.parse(localStorage.getItem("highScores"));
+    if (scores) {
+        if (user in scores) {
+            if (scores[user] < finalScore) {
+                scores[user] = finalScore
+            }
+        } else {
+            scores[user] = finalScore
+        }
+        localStorage.setItem("highScores", JSON.stringify(scores))
     } else {
-        localStorage.setItem("initials", JSON.stringify(user));
+        let scores = {}
+        scores[user] = finalScore;
+        localStorage.setItem("highScores", JSON.stringify(scores))
     }
     viewScores();
 }
 
-var finalScore = timeLeft;
+// displays final score, asks user for intials
 function endQuiz(event = null) {
     if (event != null) {
         event.preventDefault();
@@ -127,6 +152,7 @@ function endQuiz(event = null) {
     answerEl.classList.add("hide");
     questionsEl.classList.add("hide");
     endPromptEl.classList.remove("hide");
+    var finalScore = timeLeft;
 
     var endPromptFinalScore = document.createElement("p");
     endPromptFinalScore.textContent = "Your final score is " + finalScore;
@@ -140,8 +166,6 @@ function endQuiz(event = null) {
     endPromptWriteInitials.textContent = "Write your intials below";
     endPromptEl.append(endPromptWriteInitials);
 
-    var endPromptInput = document.createElement("input");
-    endPromptInput.setAttribute("id", "initials");
     endPromptEl.append(endPromptInput);
 
     var endPromptSubmitScore = document.createElement("button");
@@ -152,14 +176,9 @@ function endQuiz(event = null) {
     endPromptEl.append(lineBreak);
 
     endPromptSubmitScore.addEventListener("click", scoreHandler);
+};
 
-    //var scoreStorage = localStorage.getItem(finalScore);
-    //console.log(scoreStorage);
-}
-
-var scoreStorage = localStorage.getItem(finalScore);
-console.log(scoreStorage);
-
+// displays high scores
 function viewScores(event = null) {
     if (event != null) {
         event.preventDefault();
@@ -168,22 +187,29 @@ function viewScores(event = null) {
     questionsEl.classList.add("hide");
     answerEl.classList.add("hide");
     endPromptEl.classList.add("hide");
+
     var viewScoresH3 = document.createElement("h3");
     viewScoresH3.textContent = "High Scores:";
-    viewScoresEl.append(viewScoresH3);
+    viewScoresEl.prepend(viewScoresH3);
     viewScoresEl.classList.remove("hide");
-
-    var initialStorage = localStorage.getItem("initials");
-    console.log(initialStorage);
-
-    var scoreDisplayP = document.createElement("p");
-    scoreDisplayP.textContent = initialStorage + " - " + scoreStorage;
-    viewScoresEl.append(scoreDisplayP);
+    
+    var scores = JSON.parse(localStorage.getItem("highScores"));
+    let keys = Object.keys(scores);
+    keys.sort((a, b) => {
+        return scores[b] - scores[a]
+    });
+    console.log(scores);
+    for (let index in keys) {
+        var scoreDisplayP = document.createElement("p");
+        scoreText = keys[index] + " - " + scores[keys[index]];
+        scoreDisplayP.innerHTML = scoreText;
+        scoreDisplayEl.appendChild(scoreDisplayP); 
+    };
 
     var endPromptGoBack = document.createElement("button");
     endPromptGoBack.classList.add("btn-primary", "btn", "m-2", "btn-mw-10");
     endPromptGoBack.setAttribute("id", "go-back");
-    endPromptGoBack.textContent = "Go Back";
+    endPromptGoBack.textContent = "Start Over";
     endPromptGoBack.addEventListener("click", goBack);
     viewScoresEl.append(endPromptGoBack);
 
@@ -192,10 +218,6 @@ function viewScores(event = null) {
     clearScoresBtn.textContent = "Clear Scores";
     viewScoresEl.append(clearScoresBtn);
     clearScoresBtn.addEventListener("click", clearScores);
-
-    //get local storages
-    //append local storages and style it
-    //save scores (maybe concatenation)
 }
 
 function clearScores(event) {
@@ -208,12 +230,7 @@ function goBack () {
     window.location.reload();
 }
 
-//add score up above
-
-// create user object from submission
-
-//store high scores on local storage after the quiz has been completed
-
+// button event listeners
 viewScoresLink.addEventListener("click", viewScores);
 questionsEl.addEventListener("click", clickHandler);
 startQuizBtn.addEventListener("click", startQuiz);

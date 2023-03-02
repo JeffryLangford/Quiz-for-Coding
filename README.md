@@ -1,35 +1,28 @@
-# Quiz-for-Coding
+# Classical Music Composer Quiz
 
-As you proceed in your career as a web developer, you will probably be asked to complete a coding assessment, which is typically a combination of multiple-choice questions and interactive challenges. For this challenge, you will build a timed code quiz that's made up of multiple-choice questions. This app will run in the browser and feature dynamically updated HTML and CSS powered by your JavaScript code. It will also feature a clean and polished user interface and be responsive, ensuring that it adapts to multiple screen sizes.
+## Description
+This fun faux-arcade game tests the user's knowledge on classical music composers. After finishing the quiz, the user can store their high score compared to others who have also.
+
+## Link to Application
+https://jeffrylangford.github.io/Quiz-for-Coding/
 
 ## User Story
-
 ```
-AS A coding boot camp student
-I WANT to take a timed quiz on JavaScript fundamentals that stores high scores
-SO THAT I can gauge my progress compared to my peers
-```
-
-## Acceptance Criteria
-
-```
-GIVEN I am taking a code quiz
-WHEN I click the Start button
-THEN a timer starts and I am presented with a question
-WHEN I answer a question
-THEN I am presented with another question
-WHEN I answer a question incorrectly
-THEN time is subtracted from the clock
-WHEN all questions are answered or the timer reaches 0
-THEN the game is over
-WHEN the game is over
-THEN I can save my initials and score
+AS A person interesting in classical composers
+I WANT to take a timed quiz on them
+SO THAT I refresh my knowledge or learn something new
 ```
 
-## Screenshot:
+## Screenshot
+![alt text](assets/images/screenshot.png)
 
-![alt text](./assets/images/Screenshot%202022-05-14%20181433.png)
+## Usage Information
+Start the quiz when desired then answer as quickly and accurately as possible. Your final score will be your time left. Afterwards, enter in your initials so you can compare them to others who have also taken the quiz.
 
-## Link to Application:
+---
 
-[https://jeffrylangford.github.io/Quiz-for-Coding/](https://jeffrylangford.github.io/Quiz-for-Coding/)
+## Questions
+
+[Github](https://github.com/JeffryLangford)
+
+[Email](jblangford97@gmail.com)
